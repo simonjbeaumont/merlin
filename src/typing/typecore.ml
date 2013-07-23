@@ -2504,7 +2504,7 @@ and type_expect_ ?in_function env sexp ty_expected =
           exp_env = env }
       with Unify _ ->
         Merlin_types.raise_error 
-          (Error(e.pexp_loc, Undefined_method (obj.exp_type, met)));
+          (Error(e.pexp_loc, env, Undefined_method (obj.exp_type, met)));
         rue {
           exp_desc = Texp_send(obj, Tmeth_name met, None);
           exp_loc = loc; exp_extra = [];
