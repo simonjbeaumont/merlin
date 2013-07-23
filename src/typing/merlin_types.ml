@@ -2,7 +2,7 @@ open Misc
 
 let errors : (exn list ref * (int,unit) Hashtbl.t) option fluid = fluid None
 let raise_error exn =
-  match !errors with
+  match ~!errors with
   | Some (l,h) -> l := exn :: !l
   | None -> raise exn
 
@@ -23,3 +23,5 @@ let erroneous_type_check te =
   match ~!errors with
   | Some (l,h) when Hashtbl.mem h te.Types.id -> true
   | _ -> false
+
+let relax_typer = fluid false

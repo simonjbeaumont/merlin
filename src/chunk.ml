@@ -176,7 +176,7 @@ let sync outlines chunks =
           let chunk =
             match
               Misc.fluid'let Outline_utils.local_modules (Some local_modules) (fun () ->
-                Location.catch_warnings (fun () -> sync_step kind tokens chunks))
+                Merlin_parsing.catch_warnings (fun () -> sync_step kind tokens chunks))
             with
             | warnings, Misc.Inr item ->
               warnings @ exns , item

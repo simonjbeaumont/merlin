@@ -67,6 +67,18 @@ module Utils = struct
 
   let debug_log = Logger.(log (Section.(`locate)))
   let error_log = Logger.(error (Section.(`locate)))
+
+  let ident_of_signature_item = function
+    | Types.Sig_value (id,_)           
+    | Types.Sig_type (id,_,_)
+    | Types.Sig_exception (id,_)       
+    | Types.Sig_module (id,_,_)
+    | Types.Sig_modtype (id,_)         
+    | Types.Sig_class (id,_,_)
+    | Types.Sig_class_type (id,_,_) -> id
+
+  let signature_item_has_name name s =
+    (ident_of_signature_item s).Ident.name = name
 end
 
 include Utils
@@ -107,7 +119,7 @@ and check_item modules item =
     | Browse.NamedOther id when id.Ident.name = name ->
       Some item.Browse.loc
     | Browse.Module (Browse.Include ids, _)
-      when List.exists (fun i -> i.Ident.name = name) ids ->
+      when List.exists (signature_item_has_name name) ids ->
       aux (Lazy.force item.Browse.nodes) [ name ]
     | Browse.Other ->
       (* The fuck is this? *)
@@ -119,7 +131,7 @@ and check_item modules item =
     | Browse.Module (Browse.TopNamed id, _) when id.Ident.name = name ->
       `Direct
     | Browse.Module (Browse.Include ids, _)
-      when List.exists (fun i -> i.Ident.name = name) ids ->
+      when List.exists (signature_item_has_name name) ids ->
       `Included
     | _ -> `Not_found
   in
@@ -204,7 +216,7 @@ let from_string ~sources ~env ~local_modules path =
   try
     let path, loc =
       if is_label then (
-        let _, label_desc = Env.lookup_label ident env in
+        let label_desc = Env.lookup_label ident env in
         path_and_loc_from_label label_desc env
       ) else (
         try
@@ -216,7 +228,7 @@ let from_string ~sources ~env ~local_modules path =
           path, typ_decl.Types.type_loc
         with Not_found ->
         try
-          let _, cstr_desc = Env.lookup_constructor ident env in
+          let cstr_desc = Env.lookup_constructor ident env in
           path_and_loc_from_cstr cstr_desc env
         with Not_found ->
         try

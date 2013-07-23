@@ -275,37 +275,8 @@ let print_warning loc ppf w =
   end
 ;;
 
-<<<<<<< HEAD
-exception Warning of t * string
-
-let warnings : exn list ref option fluid = fluid None
-
-let raise_warning exn =
-  match ~!warnings with
-  | None -> raise exn
-  | Some l -> l := exn :: !l
-
-let prerr_warning loc w =
-  match ~!warnings with
-  | None -> print_warning loc err_formatter w
-  | Some l ->
-    let ppf, to_string = Misc.ppf_to_string () in
-    print_warning loc ppf w;
-    match to_string () with
-      | "" -> ()
-      | s ->  l := Warning (loc,s) :: !l
-
-let catch_warnings f =
-  let caught = ref [] in
-  let result = 
-    try_sum (fun () -> fluid'let warnings (Some caught) f)
-  in
-  !caught, result
-;;
-=======
 let prerr_warning_ref = ref (fun loc w -> print_warning loc err_formatter w);;
 let prerr_warning loc w = !prerr_warning_ref loc w;;
->>>>>>> Synchronized parsing with ocaml-trunk
 
 let echo_eof () =
   print_newline ();

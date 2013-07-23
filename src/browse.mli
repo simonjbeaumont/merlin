@@ -34,7 +34,7 @@
 
 type mod_info =
   | TopNamed of Ident.t
-  | Include of Ident.t list
+  | Include of Types.signature
   | Alias of Path.t
   | Local
 

@@ -1829,7 +1829,7 @@ and type_relax ?in_function env sexp ty_expected =
   in
   try
     let ty = newvar () in
-    let exp = type_expect' ?in_function env sexp ty in
+    let exp = type_expect_ ?in_function env sexp ty in
     try
       unify_exp_types sexp.pexp_loc env ty ty_expected;
       exp
@@ -3698,9 +3698,6 @@ let report_error env ppf = function
 
 let report_error env ppf err =
   wrap_printing_env env (fun () -> report_error env ppf err)
-
-let report_error env ppf err =
-  wrap_printing_env env (fun () -> report_error ppf err)
 
 let () =
   Env.add_delayed_check_forward := add_delayed_check
