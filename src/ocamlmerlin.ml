@@ -121,6 +121,14 @@ let main_loop () =
   with Stream.Failure -> ()
 
 (** Mimic other Caml tools, entry point *)
+let print_version () =
+  Printf.printf "The Merlin toolkit version %s, for Ocaml %s\n"
+    My_config.version Sys.ocaml_version;
+  exit 0
+
+let print_version_num () =
+  Printf.printf "%s\n" My_config.version;
+  exit 0
 
 module Options = Top_options.Make (struct
   let _projectfind path =
