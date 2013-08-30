@@ -434,7 +434,7 @@ let rec transl_type env policy styp =
           if equal env false [ty] [ty'] then () else
           try unify env ty ty'
           with Unify trace ->
-            raise(Error(loc, env, Constructor_mismatch (env,ty,ty')))
+            raise(Error(loc, env, Constructor_mismatch (ty,ty')))
         with Not_found ->
           Hashtbl.add hfields h (l,f)
       in
@@ -771,7 +771,7 @@ let report_error env ppf = function
       fprintf ppf "The present constructor %s has a conjunctive type" l
   | Present_has_no_type l ->
       fprintf ppf "The present constructor %s has no type" l
-  | Constructor_mismatch (env, ty, ty') ->
+  | Constructor_mismatch (ty, ty') ->
       wrap_printing_env env (fun ()  ->
 	Printtyp.reset_and_mark_loops_list [ty; ty'];
 	fprintf ppf "@[<hov>%s %a@ %s@ %a@]"
