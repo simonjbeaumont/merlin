@@ -68,17 +68,8 @@ module Utils = struct
   let debug_log = Logger.(log (Section.(`locate)))
   let error_log = Logger.(error (Section.(`locate)))
 
-  let ident_of_signature_item = function
-    | Types.Sig_value (id,_)           
-    | Types.Sig_type (id,_,_)
-    | Types.Sig_exception (id,_)       
-    | Types.Sig_module (id,_,_)
-    | Types.Sig_modtype (id,_)         
-    | Types.Sig_class (id,_,_)
-    | Types.Sig_class_type (id,_,_) -> id
-
-  let signature_item_has_name name s =
-    (ident_of_signature_item s).Ident.name = name
+   let signature_item_has_name name s =
+    (Browse_misc.signature_ident s).Ident.name = name
 end
 
 include Utils
